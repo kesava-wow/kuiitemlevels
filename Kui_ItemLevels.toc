@@ -1,0 +1,9 @@
+## Interface: 70000
+## Author: Kesava
+## Title: Kui |cff9966ffItemLevels|r
+## Notes: Tells you what items your level is. Or something.
+## OptionalDeps: Bagnon
+
+lib\embeds.xml
+
+main.lua
