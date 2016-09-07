@@ -1,5 +1,4 @@
 -- #############################################################################
--- artefact relics
 -- guild bank
 -- update when changing equip sets
 -- #############################################################################
@@ -258,7 +257,8 @@ do
 
                 slot.KuiText:Hide()
 
-                local ilvl = slot.relicLink and liui:GetUpgradedItemLevel(slot.relicLink)
+                local _,_,_,link = C_ArtifactUI.GetRelicInfo(i)
+                local ilvl = link and liui:GetUpgradedItemLevel(link)
                 if ilvl then
                     slot.KuiText:SetText(ilvl)
                     slot.KuiText:Show()
@@ -293,11 +293,13 @@ end
 function addon:PLAYER_EQUIPMENT_CHANGED()
     UpdateEquipment()
     GetInventorySlotItems()
-    self:UpdateRelics()
 end
 function addon:BAG_UPDATE()
     UpdateEquipment()
     GetInventorySlotItems()
+end
+function addon:ARTIFACT_UPDATE()
+    self:UpdateRelics()
 end
 function addon:PLAYERBANKSLOTS_CHANGED()
     self:BAG_UPDATE()
@@ -314,5 +316,6 @@ addon:RegisterEvent('ADDON_LOADED')
 addon:RegisterEvent('EQUIPMENT_SETS_CHANGED')
 addon:RegisterEvent('PLAYER_EQUIPMENT_CHANGED')
 addon:RegisterEvent('BAG_UPDATE')
+addon:RegisterEvent("ARTIFACT_UPDATE");
 addon:RegisterEvent('PLAYERBANKSLOTS_CHANGED')
 addon:RegisterEvent("BANKFRAME_OPENED");
