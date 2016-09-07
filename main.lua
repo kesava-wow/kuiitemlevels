@@ -227,9 +227,58 @@ local function UpdateEquipment()
         end
     end
 end
+-- artefact ui stuff ###########################################################
+do
+    local hooked
+
+    local function CreateRelicText(slot)
+        local text = slot:CreateFontString(nil,'OVERLAY')
+        text:SetPoint('BOTTOM',slot,'TOP',0,-18)
+        text:SetFont(kui.m.f.francois,11,'outline')
+        text:SetShadowColor(0,0,0,1)
+        text:SetShadowOffset(1,-1)
+        text:Hide()
+
+        slot.KuiText = text
+    end
+    local function ArtifactFrameOnShow(self)
+        addon:UpdateRelics()
+    end
+
+    function addon:UpdateRelics()
+        if not hooked then return end
+        if not ArtifactFrame:IsShown() then return end
+
+        for i=1,3 do
+            local slot = ArtifactFrame.PerksTab.TitleContainer['RelicSlot'..i]
+            if slot then
+                if not slot.KuiText then
+                    CreateRelicText(slot)
+                end
+
+                slot.KuiText:Hide()
+
+                local ilvl = slot.relicLink and liui:GetUpgradedItemLevel(slot.relicLink)
+                if ilvl then
+                    slot.KuiText:SetText(ilvl)
+                    slot.KuiText:Show()
+                end
+            end
+        end
+    end
+    function addon:HookArtifactUI()
+        hooked = true
+        ArtifactFrame:HookScript('OnShow',ArtifactFrameOnShow)
+    end
+end
 -- events ######################################################################
 function addon:ADDON_LOADED(addon)
-    if addon ~= folder then return end
+    if addon == 'Blizzard_ArtifactUI' then
+        self:HookArtifactUI()
+    elseif addon ~= folder then
+        return
+    end
+
     ParseSlots()
     CreateText()
 
@@ -244,6 +293,7 @@ end
 function addon:PLAYER_EQUIPMENT_CHANGED()
     UpdateEquipment()
     GetInventorySlotItems()
+    self:UpdateRelics()
 end
 function addon:BAG_UPDATE()
     UpdateEquipment()
