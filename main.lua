@@ -117,6 +117,7 @@ local function ParseLocationArray(es_name,items)
     end
 end
 local function GetInventorySlotItems()
+    -- create list of items in equipment sets
     local num = GetNumEquipmentSets()
     wipe(es_items)
 
@@ -179,7 +180,7 @@ local function UpdateEquipment()
     -- fetch item levels
     for k,b in pairs(buttons) do
         local link = GetInventoryItemLink('player',k)
-        if link then
+        if link and (b ~= CharacterSecondaryHandSlot or not HasArtifactEquipped()) then
             local ilvl = liui:GetUpgradedItemLevel(link)
             b.Kui_ilvl = ilvl
 
@@ -202,7 +203,6 @@ local function UpdateEquipment()
     -- set text
     for k,b in pairs(buttons) do
         local ilvl = b.Kui_ilvl
-
         if ilvl then
             -- scaled distance & direction from centre point between low/high
             local grad_dir = (.5-((ilvl-low)/diff))*2
