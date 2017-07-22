@@ -118,13 +118,12 @@ local function ParseLocationArray(es_name,items)
 end
 local function GetInventorySlotItems()
     -- create list of items in equipment sets
-    local num = GetNumEquipmentSets()
+    local ids = C_EquipmentSet.GetEquipmentSetIDs()
     wipe(es_items)
 
-    for n = 1,num do
-        local name = GetEquipmentSetInfo(n)
-        local items = GetEquipmentSetLocations(name)
-
+    for k,id in ipairs(ids) do
+        local name = C_EquipmentSet.GetEquipmentSetInfo(id)
+        local items = C_EquipmentSet.GetItemLocations(id)
         ParseLocationArray(name,items)
     end
 end
