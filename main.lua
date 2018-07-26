@@ -282,7 +282,7 @@ function addon:ADDON_LOADED(addon)
     CreateText()
 
     if Bagnon and Bagnon.ItemSlot then
-        hooksecurefunc(Bagnon.ItemSlot,'SetItem',UpdateSlotButton)
+        hooksecurefunc(Bagnon.ItemSlot,'Update',UpdateSlotButton)
     end
 end
 function addon:EQUIPMENT_SETS_CHANGED()
